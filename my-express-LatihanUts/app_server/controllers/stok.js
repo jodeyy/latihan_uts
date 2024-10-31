@@ -1,40 +1,37 @@
 const mongoose = require("mongoose");
-const Produk = mongoose.model("Mahasiswa");
+const Stok = mongoose.model("Stok");
 
 const index = (req, res, next) => {
-    Produk.find({}, { __v: 0 })
-      .then((prd) => {
+    Stok.find({}, { __v: 0 })
+      .then((stk) => {
         const responseMessage = {
             code: 200,
             success: true,
             message: "Successfull",
-            data: prd
+            data: stk
         };
         res.status(200).json(responseMessage);
       })
-     .catch((e) => {
+      .catch((e) => {
         const responseMessage = {
-
             code: 400,
             success: false,
-            message: "Bad request"
+            message: "Failed"
         };
         res.status(400).json(responseMessage);
       });
 };
 
-//untuk menghandle request insert mahasiswa
 const insert = (req, res, next) => {
-    const prd = new Produk({
-      nama: req.body.nama,
-      deskripsi: req.body.deskripsi,
-      harga: req.body.harga,
-      stok: req.body.stok,
-      kategori_id:req.body.kategori_id,
-      aktif: true
+    const stk = new Stok({
+      //produk_id: req.body.produk_id,
+      jumlah: req.body.jumlah,
+      tanggal_update: req.body.tanggal_update,
+      keterangan: req.body.keterangan,
+      lokasi: req.body.lokasi,
     });
   
-    prd
+    stk
       .save()
       .then((result) => {
             const responseMessage = {
@@ -49,9 +46,11 @@ const insert = (req, res, next) => {
             const responseMessage = {
                 code: 400,
                 success: true,
-                message: "Bad request"
+                message: "Failed"
             };
             res.status(400).json(responseMessage);
         });
 };
-
+module.exports = {
+    index,insert
+}
